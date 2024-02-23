@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+
+  postgres:
+    image: postgres:15.3
+    restart: always
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - 5432:5432
+    networks:
+      - default
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+
+  server:
+    container_name: vite_server
+    restart: unless-stopped
+    build:
+      context: server
+      target: dev
+      dockerfile: Dockerfile
+    ports:
+      - 3001:3001
+    networks:
+      - default
+    depends_on:
+      - postgres
+
+  client:
+    container_name: vite_server
+    restart: unless-stopped
+    build:
+      context: client
+      target: dev
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    networks:
+      - default
+    depends_on:
+      - postgres
+
+networks:
+  default:
+    name: networkname
+    driver: bridge

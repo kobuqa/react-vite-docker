@@ -1,4 +1,4 @@
-FROM node:21-alpine AS dev-builder
+FROM node:21-alpine AS dev
 ENV NODE_ENV=production
 WORKDIR /usr/src/be
 COPY package*.json .
